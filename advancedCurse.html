@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>curso de html</title>
+
+    <style>
+
+        #motherBox{
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-flow:column;
+
+        }
+
+        .element{
+    
+            /* class="element" */
+            margin:25px 0 25px 0;
+        
+        }
+    
+        #local{
+    
+            border:black solid 5px;
+    
+            width: 185px;
+            height: 165px;
+    
+        }
+    
+        #map{
+    
+            height: 55%;
+            width:55%;
+    
+        }
+    
+    
+        #box{
+    
+            /*tamaño*/
+        width:220px;
+        height: 200px;
+        border:black solid 4px;
+        text-align: center;
+    
+        }
+
+        #Box1{
+
+            /*tamaño*/
+            width: 64px;
+            height: 64px;
+
+            /*personalizacion*/
+            background-color: yellow;
+
+            /*posicion*/
+            margin:10px 10px 10px 10px;
+
+        }
+
+        #Box2{
+
+            /*tamaño*/
+            width: 85px;
+            height: 85px;
+
+            /*personalizacion*/
+            background-color: black;
+
+            /*posicion*/
+            margin:10px 10px 10px 10px;
+            display: flex;
+            flex-flow: row;
+            justify-content: center;
+
+        }
+
+        #Box3{
+
+            /*tamaño*/
+            width: 95px;
+            height: 95px;
+
+            /*tamaño*/
+            background-color: brown;
+
+            /* posicion */
+            margin:10px 10px 10px 10px;
+            display: flex;
+            flex-flow: row;
+            justify-content: center;
+
+        }
+
+        #boxContainer{
+            
+            /*personalizacion*/
+            border:black solid 3px;
+
+            /*tamaño*/
+            width: 500px;
+            height: 300px;
+
+            /*posicion*/
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-flow: row;
+
+        }
+    </style>
+
+    <script script src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBgZZK8umUqJn8d5CoIZqWPJ_qtMfqD9q0&callback=initMap"async defer></script>
+
+<script>
+
+/* CANVAS CLASS */
+    var draw = document.getElementById("Pepe");
+    var ctx = draw.getContext("2d");
+
+    ctx.beginPath();
+    ctx.arc(95,50,40,0,2 * Math.PI);
+    ctx.stroke();
+
+    /* VIDEO CLASS */
+    let video = document.getElementById("video");
+
+            function changeScreen(){
+
+        video.width =1500;
+        video.height=1000;
+        }
+
+        function regretScreen(){
+
+        video.width = 250;
+        video.height = 350;
+
+        }
+
+    /*AUDIO CLASS*/
+    function pausePlay(){
+
+    if(video.paused){
+
+        video.play() ;
+
+    } else if(video.played ) {
+
+        video.pause();
+
+    }}
+
+    /*GEOLOCATION CLASS (worse way to make it)*/
+var x = document.getElementById('local');
+
+function takeLocation(){
+
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(seePosition);
+    } else {x.innerHTML = "none"}
+}
+
+function seePosition(position){
+
+    x.innerHTML = "Latitud : "+ position.coords.latitude + "<br> Longitud: " + position.coords.longitude;
+
+}
+
+</script>
+
+
+
+<script>
+
+    /* GEO LOCATION CLASS (Best way to make it) */
+
+let map;
+
+function initMap(){
+
+    map = new google.maps.Map(document.getElementById('map'),{
+        center: {lat:53.430938, lng:-2.960841}, zoom:18
+    
+    });
+
+}
+
+</script>
+
+<script>
+
+    /* interactions */
+
+    /*with this we start our function to save our images inside our "box*/
+    function startMotion(mot){
+
+        mot.preventDefault();
+    }
+
+    /*here we are taking the id of the element that we are dragging*/
+    function drag(mot){
+
+        /*here we are setting the value inside our parameter tanking the text like reference*/
+        mot.dataTransfer.setData("text", mot.target.id);
+
+    }
+
+    /*Here we are introducing the data of our element inside of our box*/
+    function drop(mot){
+
+        mot.preventDefault();
+
+        /*here we are getting the data from the end of our action keeping the data type*/
+        var info = mot.dataTransfer.getData("text");
+        
+        mot.target.appendChild(document.getElementById("intImage"));
+
+    }
+    
+    let boxTaker = document.getElementById("boxContainer")
+    
+    function startMotionBox(bMot){
+
+        bMot.preventDefault();
+
+    }
+
+    function dragBox(bMot){
+
+        bMot.dataTransfer.setData("text",bMot.target.id);
+
+    }
+
+    function dropBox(bMot){
+
+            bMot.preventDefault();
+
+            let inf = bMot.dataTransfer.getData("text");
+            
+            bMot.target.appendChild(document.getElementById("Box1"));
+            bMot.target.appendChild(document.getElementById("Box2"));
+            bMot.target.appendChild(document.getElementById("Box3"));
+        
+
+    }
+
+    function resetDivBoxes(){
+
+        document.getElementById("Box1").remove()
+        document.getElementById("Box2").remove()
+        document.getElementById("Box3").remove()
+
+    }
+
+    function showDivBoxes(){
+
+        let box1 = `<p id = "Box1" class = "element" draggable="true" ondragstart="dragBox(event)" ondragover = "startMotionBox(event)" ondrop = "dropBox(event)"> </p>`;
+        let box2 = `<p id = "Box2" class = "element" draggable="true" ondragstart="dragBox(event)" ondragover = "startMotionBox(event)" ondrop = "dropBox(event)"> </p>`;
+        let box3 = `<p id = "Box3" class = "element" draggable="true" ondragstart="dragBox(event)" ondragover = "startMotionBox(event)" ondrop = "dropBox(event)"> </p>`;
+        
+        document.getElementById("boxContainer").innerHTML += box1;
+        document.getElementById("boxContainer").innerHTML += box2;
+        document.getElementById("boxContainer").innerHTML += box3;
+
+    }
+
+//`
+</script>
+
+</head>
+<body>
+
+    <div id ="motherBox" style ="text-align: center;" >
+    <!-- <form action="action.php" method ="">
+
+        <label for = "usuario">usuario:</label><br>
+        <input type ="text" id = "user" name = "user" placeholder ="onlyname"> <br>
+
+        <label for = "pass">contraseña</label><br>
+        <input type= "password" name = "user" id ="pass"><br>
+        <input type = "reset" value = "clean">
+
+    </form>Form is very useful to acces to archives that will process the data inside of there , and "method is useful to set the data type that we´re using inside the form get is for take the action, post is for send by a more secure way our data(data that cannot be see) "-->
+    <br>
+
+    <h1 style = "text-align: center;" id ="header">Curso Avanzado HTML
+        <img src="">
+        </h1>
+    
+        <section style="text-align: center;" class="element">
+    
+            <article class="element">
+    
+                <h2>Hola</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, saepe laboriosam! Omnis necessitatibus adipisci voluptatum itaque vero laboriosam sed asperiores quaerat consequuntur eveniet, culpa quis et obcaecati voluptatibus dolore eum!</p>
+    
+            </article>
+    
+            <article class="element">
+    
+                <h2>Como estas</h2>
+                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tenetur placeat mollitia id earum adipisci soluta quo aut reiciendis a non voluptate dolore, maiores, nostrum quasi deleniti ratione voluptatem. Dolores, omnis.</p>
+    
+            </article>
+    
+            <article class="element">
+    
+                <h2>Moli?</h2>
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ratione placeat labore sint. Perferendis quaerat suscipit eligendi quas sunt dolorum illum, delectus recusandae quasi magnam nam ipsum modi expedita amet. Voluptatem.</p>
+    
+            </article>
+    
+            <article>
+    
+                <h2>Quien soy?</h2>
+    
+            <ul class="element">
+    
+                <li>un humano?</li>
+                <li>Una persona?</li>
+                <li>Un Heroe?</li>
+                <li>Un mounstruo?</li>
+                <li>Importa?</li>
+    
+            </ul>
+            </article>
+    
+        </section>
+    
+        <footer style="text-align: center;">Lorem ipsum dolor sit amet Natus in accusamus dolor placeat expedita sint aperiam a, harum vero, nemo error. <a href = "#"> Telf:394204585</a></footer> <br>
+
+    <!-- Forms -->
+    <form class="element">
+
+        <br>
+        <label for = "julio">Julito</label>
+        <input type="checkbox" id = "julio" name = "club1" value = "Julio"><br>
+
+        <label for =" pedro">Pedrito</label>
+        <input type = "checkbox" id = "Pedro" name = "club1" value = "Pedro"><br><br>
+
+        <label for ="cumpleaños">DIME TU CUMPLE</label><br>
+        <input type = "date" id ="cumpleaños" max ="2023-12-23"><br><br>
+
+        <label for ="telefono">Dame tu numero de telefon</label><br>
+        <input type="tel" id ="telefono" pattern="[0-10]{2}-[0-10]{7}"><!-- With this we can work thif phone number inside our form -->
+        <input type ="submit" value="send" ><br><br>
+
+        <label for ="Pin">Dame 6 numeros max</label>
+        <input type ="text" id ="Pin" size = "6"> <br><br><!-- We can define de amount of chars that can write inside our input -->
+
+        <!-- Select it's a mark that let us show multiple option inside a tab -->
+        <select>
+            <option><a href="index.html">Cap2</a></option>
+            <option><a href ="cap2.html">index</a></option>
+        </select>
+
+        <video class="element">
+
+            <source src ="" type ="video">
+            <track srclang="en" kind ="subtitles">
+
+        </video>
+
+        <br>
+        <input type="file" name ="Upload" class="element">
+
+        <!-- We can write and specify some properties inside our elements for example, disable some input -->
+
+        <br>
+        <input type ="text" disabled ="disabled" class="element"><!-- Now we can´t write inside this input -->
+        <br>
+    </form>
+
+    <canvas id = "Pepe" style ="border:solid black 5px;" width="200px" height="200px" ></canvas> <br>
+    <br>
+
+
+    <!-- SVG -->
+
+<svg width="600px" height="600px" style = "border:yellow 7px solid;" class="element">
+
+    <rect x = "150" y ="170" height="200px" width="300px" style ="fill:violet; stroke:red;stroke-width:10px;"/>
+
+    <circle cx ="300" cy = "500" r ="100" style ="fill:blue; stroke:darkgreen; stroke-width:12px;"/>
+
+    <rect x = "200" y ="8" height="150px" width="200px" rx ="15" ry ="15" style="fill:gray; stroke:darkorange; stroke-width:7px;" />
+
+    <image></image>
+
+</svg> <br><br>
+
+<!-- Video -->
+
+<button onclick="pausePlay()">play/pause</button>
+<button onclick="changeScreen()">pantalla Completa</button>
+<button onclick="regretScreen()">pantalla normal</button> <br>
+
+<video id ="video" width="250px" height="350px" class="element">
+
+    <source  src ="Video_de introduccion_a_la programación.mp4"> 
+
+</video> <br>
+
+<!-- iframe -->
+
+<iframe src="https://www.youtube.com/embed/TEjtjAd4lYQ?controls=0" frameborder = "0"></iframe>
+
+<br>
+<br>
+
+<!-- Audio -->
+
+<audio id = "audio" class="element">
+
+    <source src ="yt5s.com - Grandpop's Uke (128 kbps).mp3">
+
+</audio>
+
+<button onclick= "document.getElementById('audio').play()"> >> </button>
+<button onclick= "document.getElementById('audio').pause()">II</button>
+<button onclick= "document.getElementById('audio').volume += 0.1">+</button>
+<button  id ="low" onclick= "document.getElementById('audio').volume -= 0.1">-</button><br>
+
+
+<!-- geo location -->
+<div class = "element" style = "display: flex; align-items: center;flex-flow: column;">
+<h1>Estoy en</h1>
+<button onclick="takeLocation()">BUSCAR</button>
+<p id ="local" > </p>
+</div>
+
+<!--INTERACTIONS  -->
+<div style="display: flex;flex-flow: column;
+align-items: center;">
+<p id = "box" ondrop = "drop(event)" ondragover = "startMotion(event)" class = "element"></p>
+
+<img src = "photo_2023-04-23_22-53-10.jpg" draggable="true" ondragstart="drag(event)" width = "220" height="200" ondragover="event" id = "intImage"> </div>
+
+<h1 class = "element">Little practice</h1>
+
+<!-- Little excersize -->
+<div id = "boxContainer">
+
+<p id = "Box1" class = "element" draggable="true" ondragstart="dragBox(event)" ondragover = "startMotionBox(event)" ondrop = "dropBox(event)"> </p>
+
+<p id = "Box2" class = "element"  draggable="true" ondrop = "dropBox(event)" ondragover = "startMotionBox(event)"> </p>
+
+<p id = "Box3" class = "element"  ondrop = "dropBox(event)" ondragover = "startMotionBox(event)"> </p>
+</div>
+
+<button id = "buttonResetBox" onclick="resetDivBoxes()">destroy boxes</button> <button id = "showDivBoxes" onclick="showDivBoxes()">create boxes</button>
+
+
+<!-- SEO -->
+<!-- With this is very important the tittle and metadata of our html document, using "<meta>" to put keywords about our page that make easier to the search engine find our page we have another
+especial atributes of our tags like the alt of our images of our page, to the h1,h2 and h3 are very important when we try to make easier optimize the search of our page, we have to use keywords
+important information, images, the things that explains better how our page works at the beggining of our page 
+
+its very important too with the images in our pages is use compresors to reduce the size of the images inside of our page, because we, the search engine have in count how much optimal is
+the load of our page, and have images with good quality it's important, but this images usually are very weight ,so we use the compresors to make it lighter and faster to load in our
+page (https://compressjpeg.com/ https://imagecompressor.com/ here are a couple of sites were we can make it)
+
+it's important optimize the links inside of our page too, for that we aply inside the "rel" atribute of our links the keyword "nofollow", basically, for make that only the search engine read the
+info inside our link and don´t follow were it provides
+
+too we need to take in count the domain for, in a example make that the search focus in a specific country or place, and a lot of other things-->
+</div>
+
+    
+
+</body>
+
+
+</html>
